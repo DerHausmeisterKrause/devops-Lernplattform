@@ -1,7 +1,6 @@
-FROM debian:bookworm-slim
+FROM python:3.12-slim
 WORKDIR /app
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends python3 python3-websockets \
-  && rm -rf /var/lib/apt/lists/*
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 COPY server.py .
-CMD ["python3", "server.py"]
+CMD ["python", "server.py"]
