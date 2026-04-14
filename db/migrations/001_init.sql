@@ -1,0 +1,17 @@
+CREATE TABLE tenants(id UUID PRIMARY KEY, name TEXT NOT NULL, enabled BOOLEAN DEFAULT TRUE);
+CREATE TABLE users(id UUID PRIMARY KEY, tenant_id UUID REFERENCES tenants(id), email TEXT UNIQUE NOT NULL, display_name TEXT NOT NULL);
+CREATE TABLE roles(id SERIAL PRIMARY KEY, name TEXT UNIQUE NOT NULL);
+CREATE TABLE user_roles(user_id UUID REFERENCES users(id), role_id INT REFERENCES roles(id), PRIMARY KEY(user_id, role_id));
+CREATE TABLE courses(id UUID PRIMARY KEY, tenant_id UUID REFERENCES tenants(id), slug TEXT UNIQUE, title TEXT NOT NULL);
+CREATE TABLE modules(id UUID PRIMARY KEY, course_id UUID REFERENCES courses(id), position INT NOT NULL, title TEXT NOT NULL);
+CREATE TABLE lessons(id UUID PRIMARY KEY, module_id UUID REFERENCES modules(id), markdown TEXT NOT NULL);
+CREATE TABLE labs(id UUID PRIMARY KEY, module_id UUID REFERENCES modules(id), spec JSONB NOT NULL);
+CREATE TABLE lab_tasks(id UUID PRIMARY KEY, lab_id UUID REFERENCES labs(id), prompt TEXT NOT NULL, validator TEXT NOT NULL);
+CREATE TABLE lab_runs(id UUID PRIMARY KEY, lab_id UUID REFERENCES labs(id), user_id UUID REFERENCES users(id), status TEXT NOT NULL);
+CREATE TABLE terminal_sessions(id UUID PRIMARY KEY, run_id UUID REFERENCES lab_runs(id), token TEXT NOT NULL, expires_at TIMESTAMPTZ NOT NULL);
+CREATE TABLE grade_runs(id UUID PRIMARY KEY, run_id UUID REFERENCES lab_runs(id), status TEXT NOT NULL, score INT NOT NULL);
+CREATE TABLE grade_checks(id UUID PRIMARY KEY, grade_run_id UUID REFERENCES grade_runs(id), check_id TEXT NOT NULL, passed BOOLEAN NOT NULL, message TEXT NOT NULL);
+CREATE TABLE artifacts(id UUID PRIMARY KEY, run_id UUID REFERENCES lab_runs(id), key TEXT NOT NULL, bytes BIGINT NOT NULL);
+CREATE TABLE progress(id UUID PRIMARY KEY, user_id UUID REFERENCES users(id), lesson_id UUID, lab_id UUID, status TEXT NOT NULL, score INT DEFAULT 0);
+CREATE TABLE audit_events(id UUID PRIMARY KEY, actor_id UUID, action TEXT NOT NULL, payload JSONB NOT NULL, created_at TIMESTAMPTZ DEFAULT now());
+CREATE TABLE feature_flags(key TEXT PRIMARY KEY, enabled BOOLEAN NOT NULL DEFAULT FALSE);
