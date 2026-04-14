@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>DevOps Lernplattform</title></head>
+<body>
+<h1>DevOps Lernplattform</h1>
+<button id="start">Lab starten</button>
+<pre id="out"></pre>
+<script>
+const out = document.getElementById('out');
+document.getElementById('start').onclick = async () => {
+  const run = await fetch('http://localhost:8080/api/labs/lab-linux-1/runs', {method:'POST'}).then(r=>r.json());
+  const term = await fetch(`http://localhost:8080/api/lab-runs/${run.runId}/terminal-sessions`, {method:'POST'}).then(r=>r.json());
+  const ws = new WebSocket(term.wsUrl + '?token=' + term.token);
+  ws.onmessage = (e)=> out.textContent += e.data;
+  ws.onopen = ()=> ws.send(JSON.stringify({type:'stdin',data:'echo hello from workspace\n'}));
+};
+</script>
+</body>
+</html>
