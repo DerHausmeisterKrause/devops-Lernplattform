@@ -1,0 +1,82 @@
+openapi: 3.1.0
+info:
+  title: DevOps Lernplattform API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+components:
+  securitySchemes:
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: http://localhost:8081/realms/devops/.well-known/openid-configuration
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      schema: { type: string }
+  schemas:
+    Error:
+      type: object
+      properties:
+        code: { type: string }
+        message: { type: string }
+security:
+  - oidc: []
+paths:
+  /api/me:
+    get:
+      responses:
+        '200': { description: me }
+  /api/courses:
+    get:
+      responses:
+        '200': { description: ok }
+  /api/labs/{labId}/runs:
+    post:
+      parameters:
+        - name: labId
+          in: path
+          required: true
+          schema: { type: string }
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '200':
+          description: started
+          content:
+            application/json:
+              examples:
+                startLab:
+                  value: { runId: "7f8c", status: "running" }
+  /api/lab-runs/{runId}/grade:
+    post:
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: grade
+          content:
+            application/json:
+              examples:
+                gradeResult:
+                  value:
+                    runId: "7f8c"
+                    status: passed
+                    score: 100
+                    checks:
+                      - id: svc
+                        passed: true
+                        message: service active
+  /api/me/export:
+    post:
+      responses:
+        '200':
+          description: zip export
+          content:
+            application/zip:
+              examples:
+                export:
+                  summary: Download export
+                  value: binary-zip

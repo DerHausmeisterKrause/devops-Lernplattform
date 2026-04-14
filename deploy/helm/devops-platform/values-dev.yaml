@@ -1,0 +1,4 @@
+image:
+  repository: ghcr.io/example/devops-platform
+  tag: latest
+replicaCount: 1

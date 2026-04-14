@@ -1,0 +1,8 @@
+{
+  "title": "DevOps Platform Overview",
+  "panels": [
+    {"type": "timeseries", "title": "API Latency p95"},
+    {"type": "timeseries", "title": "Terminal Active Sessions"},
+    {"type": "timeseries", "title": "Grade Runs / min"}
+  ]
+}
