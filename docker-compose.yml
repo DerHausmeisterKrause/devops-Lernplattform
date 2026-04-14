@@ -14,26 +14,20 @@ services:
       MINIO_ROOT_PASSWORD: minio123
     ports: ["9000:9000", "9001:9001"]
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.offline
+    build: ./backend
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/devops_platform
     ports: ["8080:8080"]
     depends_on: [postgres]
   terminal-gateway:
-    build:
-      context: ./terminal-gateway
-      dockerfile: Dockerfile.offline
+    build: ./terminal-gateway
     environment:
       API_BASE: http://backend:8080
     ports: ["8090:8090"]
     depends_on: [backend]
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.offline
-    ports: ["3000:80"]
+    build: ./frontend
+    ports: ["3000:3000"]
     depends_on: [backend, terminal-gateway]
   grader:
     build: ./grader

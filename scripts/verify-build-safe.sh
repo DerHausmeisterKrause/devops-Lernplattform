@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if grep -qE 'pip install --no-cache-dir -r requirements.txt' backend/Dockerfile.offline terminal-gateway/Dockerfile.offline; then
+if grep -qE 'pip install --no-cache-dir -r requirements.txt' backend/Dockerfile terminal-gateway/Dockerfile; then
   echo "ERROR: legacy pip install step detected in Dockerfile(s)." >&2
   exit 1
 fi
 
-if grep -qE 'npm install' frontend/Dockerfile.offline; then
+if grep -qE 'npm install' frontend/Dockerfile; then
   echo "ERROR: legacy npm install step detected in frontend Dockerfile." >&2
   exit 1
 fi

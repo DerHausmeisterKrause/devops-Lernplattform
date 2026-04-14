@@ -1,3 +1,6 @@
-# Legacy file intentionally disabled.
-# Use terminal-gateway/Dockerfile.offline via docker-compose build.dockerfile.
-DO_NOT_USE_THIS_FILE_USE_DOCKERFILE_OFFLINE
+FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY server.py .
+CMD ["python", "server.py"]

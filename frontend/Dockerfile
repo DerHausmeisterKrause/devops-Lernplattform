@@ -1,3 +1,5 @@
-# Legacy file intentionally disabled.
-# Use frontend/Dockerfile.offline via docker-compose build.dockerfile.
-DO_NOT_USE_THIS_FILE_USE_DOCKERFILE_OFFLINE
+FROM node:20-alpine
+WORKDIR /app
+COPY package.json server.js index.html ./
+RUN npm install
+CMD ["npm","start"]
