@@ -3,8 +3,7 @@ SHELL := /bin/bash
 .PHONY: dev down test e2e lint build docker deploy backup restore
 
 dev:
-	docker compose build --no-cache --pull
-	docker compose up -d --force-recreate
+	docker compose up --build -d
 
 down:
 	docker compose down -v

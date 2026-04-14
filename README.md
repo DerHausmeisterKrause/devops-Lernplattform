@@ -3,7 +3,7 @@
 Monorepo für eine DevOps/Linux Lernplattform ohne KI-Funktionen.
 
 ## Quickstart
-1. `make dev` (erzwingt einen frischen Build ohne Cache)
+1. `make dev`
 2. Frontend: http://localhost:3000
 3. API: http://localhost:8080/docs
 

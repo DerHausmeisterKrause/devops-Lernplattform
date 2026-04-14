@@ -1,2 +1,5 @@
-FROM nginx:1.27-alpine
-COPY index.html /usr/share/nginx/html/index.html
+FROM node:20-alpine
+WORKDIR /app
+COPY package.json server.js index.html ./
+RUN npm install
+CMD ["npm","start"]
