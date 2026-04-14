@@ -1,3 +1,5 @@
-# Legacy Dockerfile retained for reference.
-# Active build file: Dockerfile.offline (see docker-compose.yml build.dockerfile).
-FROM scratch
+FROM node:20-alpine
+WORKDIR /app
+COPY package.json server.js index.html ./
+RUN npm install
+CMD ["npm","start"]

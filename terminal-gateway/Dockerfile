@@ -1,3 +1,6 @@
-# Legacy Dockerfile retained for reference.
-# Active build file: Dockerfile.offline (see docker-compose.yml build.dockerfile).
-FROM scratch
+FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY server.py .
+CMD ["python", "server.py"]

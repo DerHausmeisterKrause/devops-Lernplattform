@@ -1,16 +1,9 @@
 SHELL := /bin/bash
 
-.PHONY: dev clean-build-cache down test e2e lint build docker deploy backup restore
+.PHONY: dev down test e2e lint build docker deploy backup restore
 
 dev:
-	./scripts/verify-build-safe.sh
-	docker compose down --remove-orphans || true
-	$(MAKE) clean-build-cache
-	docker compose build --no-cache --pull backend terminal-gateway frontend grader
-	docker compose up -d --force-recreate
-
-clean-build-cache:
-	docker builder prune -af || true
+	docker compose up --build -d
 
 down:
 	docker compose down -v
